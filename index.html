@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solución Numérica de la Ecuación de Laplace</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Solución Numérica de la Ecuación de Laplace</h1>
+        <p>
+            Explora la distribución de potencial electrostático en una región plana rectangular
+            empleando el método de Diferencias Finitas.
+        </p>
+    </header>
+
+    <main>
+        <section class="controls">
+            <h2>Configuración del Problema</h2>
+
+            <div class="input-group">
+                <label for="gridSize">Tamaño de la Malla (N x N, ej. 20):</label>
+                <input type="number" id="gridSize" value="20" min="5" max="100">
+            </div>
+
+            <div class="input-group">
+                <label for="maxIterations">Máximo de Iteraciones:</label>
+                <input type="number" id="maxIterations" value="1000" min="100" max="10000">
+            </div>
+
+            <div class="input-group">
+                <label for="tolerance">Tolerancia de Convergencia (ej. 0.0001):</label>
+                <input type="number" id="tolerance" value="0.0001" step="0.00001" min="0.000001">
+            </div>
+
+            <h3>Condiciones de Frontera</h3>
+
+            <div class="boundary-section">
+                <h4>Borde Superior (V(x,b))</h4>
+                <select id="topBoundaryType" onchange="toggleBoundaryInputs('top')">
+                    <option value="constant">Constante</option>
+                    <option value="linear">Lineal</option>
+                </select>
+                <div class="boundary-inputs" id="topConstant">
+                    <label for="topV">Valor Constante (V):</label>
+                    <input type="number" id="topV" value="10">
+                </div>
+                <div class="boundary-inputs hidden" id="topLinear">
+                    <label for="topVStart">V al inicio (izquierda):</label>
+                    <input type="number" id="topVStart" value="0">
+                    <label for="topVEnd">V al final (derecha):</label>
+                    <input type="number" id="topVEnd" value="10">
+                </div>
+            </div>
+
+            <div class="boundary-section">
+                <h4>Borde Inferior (V(x,0))</h4>
+                <select id="bottomBoundaryType" onchange="toggleBoundaryInputs('bottom')">
+                    <option value="constant">Constante</option>
+                    <option value="linear">Lineal</option>
+                </select>
+                <div class="boundary-inputs" id="bottomConstant">
+                    <label for="bottomV">Valor Constante (V):</label>
+                    <input type="number" id="bottomV" value="0">
+                </div>
+                <div class="boundary-inputs hidden" id="bottomLinear">
+                    <label for="bottomVStart">V al inicio (izquierda):</label>
+                    <input type="number" id="bottomVStart" value="0">
+                    <label for="bottomVEnd">V al final (derecha):</label>
+                    <input type="number" id="bottomVEnd" value="0">
+                </div>
+            </div>
+
+            <div class="boundary-section">
+                <h4>Borde Izquierdo (V(0,y))</h4>
+                <select id="leftBoundaryType" onchange="toggleBoundaryInputs('left')">
+                    <option value="constant">Constante</option>
+                    <option value="linear">Lineal</option>
+                </select>
+                <div class="boundary-inputs" id="leftConstant">
+                    <label for="leftV">Valor Constante (V):</label>
+                    <input type="number" id="leftV" value="5">
+                </div>
+                <div class="boundary-inputs hidden" id="leftLinear">
+                    <label for="leftVStart">V al inicio (abajo):</label>
+                    <input type="number" id="leftVStart" value="0">
+                    <label for="leftVEnd">V al final (arriba):</label>
+                    <input type="number" id="leftVEnd" value="10">
+                </div>
+            </div>
+
+            <div class="boundary-section">
+                <h4>Borde Derecho (V(a,y))</h4>
+                <select id="rightBoundaryType" onchange="toggleBoundaryInputs('right')">
+                    <option value="constant">Constante</option>
+                    <option value="linear">Lineal</option>
+                </select>
+                <div class="boundary-inputs" id="rightConstant">
+                    <label for="rightV">Valor Constante (V):</label>
+                    <input type="number" id="rightV" value="5">
+                </div>
+                <div class="boundary-inputs hidden" id="rightLinear">
+                    <label for="rightVStart">V al inicio (abajo):</label>
+                    <input type="number" id="rightVStart" value="0">
+                    <label for="rightVEnd">V al final (arriba):</label>
+                    <input type="number" id="rightVEnd" value="10">
+                </div>
+            </div>
+
+            <button id="calculateButton">Calcular y Graficar</button>
+            <p id="statusMessage" class="status"></p>
+        </section>
+
+        <section class="visualization">
+            <h2>Líneas Equipotenciales</h2>
+            <canvas id="laplaceCanvas" width="500" height="500"></canvas>
+            <div class="color-legend">
+                <div class="gradient-bar"></div>
+                <div class="labels">
+                    <span id="minPotentialLabel">Min V</span>
+                    <span id="maxPotentialLabel">Max V</span>
+                </div>
+            </div>
+            <p class="note">
+                La visualización usa un mapa de calor y líneas de contorno aproximadas.
+                Los valores numéricos en las líneas son aproximaciones a los voltajes.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Solución Numérica de Laplace. Basado en el método de Diferencias Finitas.</p>
+        <p>
+            Referencia: "Solución Numérica de la Ecuación de Laplace en una Región Plana Acotada."
+            Mariela Marin & Mauricio Garcia Castañeda. MOMENTO Revista Depto. Física Universidad Nacional de Colombia, Número 7, Octubre 1992.
+            [cite: 1, 2]
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

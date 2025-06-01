@@ -242,26 +242,23 @@ function drawEquipotentials(potentialGrid, N) {
                 const p3 = potentialGrid[i+1][j+1]; // Bottom-right
                 const p4 = potentialGrid[i+1][j];   // Bottom-left
 
-                // Determine the "case" based on which corners are above/below the level
-                // (0 for below, 1 for above)
+                
                 let cellCase = 0;
                 if (p1 > level) cellCase |= 1; // 0001
                 if (p2 > level) cellCase |= 2; // 0010
                 if (p3 > level) cellCase |= 4; // 0100
                 if (p4 > level) cellCase |= 8; // 1000
 
-                // Arrays to store crossing points (relative to cell top-left corner)
+              
                 let crossings = [];
 
-                // Helper to interpolate position of crossing point
+                
                 function interpolate(val1, val2, coord1, coord2, target) {
                     if (val1 === val2) return (coord1 + coord2) / 2; // Avoid division by zero
                     return coord1 + (coord2 - coord1) * (target - val1) / (val2 - val1);
                 }
 
-                // Marching Squares logic for common cases (no need for all 16 cases)
-                // This will draw line segments between cell edges where the potential crosses the level.
-                // It's a simplified version of true marching squares, aiming for visual representation.
+                
                 ctx.beginPath();
                 switch (cellCase) {
                     case 1: // P1 is above, others below
@@ -299,20 +296,15 @@ function drawEquipotentials(potentialGrid, N) {
                         ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize); // Left
                         ctx.lineTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize); // Bottom
                         break;
-                    // Cases with multiple segments or no segments are more complex.
-                    // For visualization, we'll draw single segments.
-                    // This simplified marching squares will not perfectly connect all contours,
-                    // but will give a good visual approximation.
                 }
                 ctx.stroke();
 
-                // To add labels, you'd find a representative point on the drawn segment
-                // and use ctx.fillText(level.toFixed(1), x, y);
+               
             }
         }
     });
 
-    // Draw grid lines on top for clarity (optional)
+   
     ctx.strokeStyle = '#95a5a6'; // Light gray
     ctx.lineWidth = 0.5;
     for (let i = 0; i <= N; i++) {
@@ -328,10 +320,10 @@ function drawEquipotentials(potentialGrid, N) {
 }
 
 
-// Event listener for the calculate button
+
 calculateButton.addEventListener('click', calculateLaplace);
 
-// Event listeners for boundary type changes
+
 topBoundaryType.addEventListener('change', () => toggleBoundaryInputs('top'));
 bottomBoundaryType.addEventListener('change', () => toggleBoundaryInputs('bottom'));
 leftBoundaryType.addEventListener('change', () => toggleBoundaryInputs('left'));

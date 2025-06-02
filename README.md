@@ -60,7 +60,7 @@ Para cada borde (Superior, Inferior, Izquierdo, Derecho), aplica el potencial se
 *Uso en el Proceso:*
 Se llama a applyBoundaryConditions(V); al inicio para establecer la configuración inicial del campo de potencial.
 Se llama a applyBoundaryConditions(V_new); dentro de cada iteración del bucle principal para asegurar que los valores de potencial en los bordes permanezcan fijos y no se vean afectados por el proceso de relajación que actualiza los puntos internos.
-#**4. El Proceso Iterativo de Relajación (lo que basicamente soluciona todo )**
+# **4. El Proceso Iterativo de Relajación (lo que basicamente soluciona todo )**
 Este es el centro del algoritmo numérico. La Ecuación de Laplace implica que, en un estado de equilibrio, el potencial en cualquier punto es el promedio de sus vecinos. El proceso de relajación busca alcanzar este equilibrio de forma iterativa.
 
 **Bucle Principal (while):**
@@ -119,7 +119,7 @@ Al finalizar cada iteración, las matrices V y V_new se intercambian. Esto signi
 V = V_new;
 V_new = temp;
 ```
-#**5. Resultados y Visualización**
+# **5. Resultados y Visualización**
 Una vez que el bucle de iteración termina (ya sea por convergencia o por alcanzar el máximo de iteraciones), la función informa al usuario el resultado del cálculo y procede a la visualización:
 
 **Mensaje de Estado Final:**

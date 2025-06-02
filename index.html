@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solución Numérica de la Ecuación de Laplace</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <header>
@@ -113,7 +114,7 @@
         </section>
 
         <section class="visualization">
-            <h2>Líneas Equipotenciales</h2>
+            <h2>Líneas Equipotenciales (2D)</h2>
             <canvas id="laplaceCanvas" width="500" height="500"></canvas>
             <div class="color-legend">
                 <div class="gradient-bar"></div>
@@ -123,8 +124,13 @@
                 </div>
             </div>
             <p class="note">
-                La visualización usa un mapa de calor y líneas de contorno aproximadas.
-                Los valores numéricos en las líneas son aproximaciones a los voltajes.
+                La visualización 2D usa un mapa de calor y líneas de contorno aproximadas.
+            </p>
+
+            <h2 style="margin-top: 2rem;">Distribución de Potencial (3D)</h2>
+            <div id="laplace3DPlot" style="width:500px; height:500px; border: 2px solid #34495e; box-shadow: 0 0 15px rgba(0,0,0,0.1); margin-top: 1rem;"></div>
+            <p class="note">
+                Puedes interactuar con el gráfico 3D (rotar, hacer zoom).
             </p>
         </section>
     </main>
@@ -134,10 +140,10 @@
         <p>
             Referencia: "Solución Numérica de la Ecuación de Laplace en una Región Plana Acotada."
             Mariela Marin & Mauricio Garcia Castañeda. MOMENTO Revista Depto. Física Universidad Nacional de Colombia, Número 7, Octubre 1992.
-            [cite: 1, 2]
         </p>
     </footer>
 
     <script src="script.js"></script>
 </body>
 </html>
+

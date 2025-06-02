@@ -182,11 +182,11 @@ function calculateLaplace() {
     }
 
     drawEquipotentials(V, N);
-    // ¡NUEVO! Llama a la función para dibujar el gráfico 3D
+    //Llama a la función para dibujar el gráfico 3D
     draw3DPlot(V, N);
 }
 
-// Función para dibujar las líneas equipotenciales y el mapa de calor (2D)
+// Función para dibujar las líneas equipotenciales 
 function drawEquipotentials(potentialGrid, N) {
     const canvasSize = laplaceCanvas.width; // 500px
     const cellSize = canvasSize / N;
@@ -211,8 +211,7 @@ function drawEquipotentials(potentialGrid, N) {
             const potential = potentialGrid[i][j];
             const normalizedPotential = (potential - minV) / (maxV - minV);
 
-            // Interpolar color de un degradado (azul a rojo)
-            // (Esta es una simplificación, Plotly usa una escala de colores más robusta)
+            
             const r = Math.floor(255 * normalizedPotential);
             const b = Math.floor(255 * (1 - normalizedPotential));
             ctx.fillStyle = `rgb(${r}, 0, ${b})`;
@@ -256,7 +255,7 @@ function drawEquipotentials(potentialGrid, N) {
                 ctx.beginPath();
                 switch (cellCase) {
                     // Aquí se dibujan los segmentos de línea basados en el "caso" de Marching Squares
-                    // Esto es una simplificación para la visualización, no una implementación completa.
+                
                     case 1: case 14:
                         ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize);
                         ctx.lineTo(interpolate(p1, p2, 0, cellSize, level) + j * cellSize, i * cellSize);
@@ -307,14 +306,13 @@ function drawEquipotentials(potentialGrid, N) {
 }
 
 
-// ¡NUEVO! Función para dibujar el gráfico 3D usando Plotly.js
+// Función para dibujar el gráfico 3D usando Plotly.js
 function draw3DPlot(potentialGrid, N) {
-    // Los datos Z son directamente tu potentialGrid
     const zData = potentialGrid;
 
     // Crea arrays para las coordenadas X e Y
     // Plotly esperará que X e Y sean arrays 1D que definan las coordenadas
-    // para las columnas y filas de tu matriz Z, respectivamente.
+    // para las columnas y filas de matriz Z, respectivamente.
     const xCoords = Array.from({ length: N }, (_, i) => i); // Del 0 a N-1
     const yCoords = Array.from({ length: N }, (_, i) => (N - 1) - i); // Del N-1 a 0 (para que el origen (0,0) esté en la parte inferior izquierda en el gráfico)
 
@@ -380,10 +378,10 @@ function draw3DPlot(potentialGrid, N) {
 }
 
 
-// Event listener para el botón de calcular
+//  botón de calcular
 calculateButton.addEventListener('click', calculateLaplace);
 
-// Event listeners para los cambios en el tipo de frontera
+// los cambios en el tipo de frontera
 topBoundaryType.addEventListener('change', () => toggleBoundaryInputs('top'));
 bottomBoundaryType.addEventListener('change', () => toggleBoundaryInputs('bottom'));
 leftBoundaryType.addEventListener('change', () => toggleBoundaryInputs('left'));

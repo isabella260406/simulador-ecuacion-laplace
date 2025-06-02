@@ -13,7 +13,7 @@ Al inicio, la función se encarga de configurar el entorno y asegurar que los da
 Se actualiza el mensaje de estado en la interfaz para indicar que el cálculo está en progreso.
 ```statusMessage.textContent = "Calculando...";
 statusMessage.style.backgroundColor = '#e7f3ff';
-statusMessage.style.color = '#0056b3';´´´
+statusMessage.style.color = '#0056b3';
 
 *Obtención de Parámetros:*
 Se recuperan los valores definidos por el usuario para el tamaño de la malla (N), el número máximo de iteraciones (maxIterations) y la tolerancia de convergencia (tolerance) desde los elementos HTML.

@@ -1,6 +1,6 @@
 # simulador-ecuacion-laplace
 Simulador interactivo de la Ecuación de Laplace usando el método de Diferencias Finitas.
-function calculateLaplace() {
+//function calculateLaplace() {
     // 1. Mensaje de Estado Inicial
     statusMessage.textContent = "Calculando...";
     statusMessage.style.backgroundColor = '#e7f3ff';

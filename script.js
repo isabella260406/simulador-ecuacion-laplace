@@ -1,4 +1,4 @@
-// DOM Elements
+// DOM Elements existentes
 const gridSizeInput = document.getElementById('gridSize');
 const maxIterationsInput = document.getElementById('maxIterations');
 const toleranceInput = document.getElementById('tolerance');
@@ -25,23 +25,22 @@ const leftLinear = document.getElementById('leftLinear');
 const rightConstant = document.getElementById('rightConstant');
 const rightLinear = document.getElementById('rightLinear');
 
-// Function to toggle boundary input visibility
+// Función para alternar la visibilidad de las entradas de frontera
 function toggleBoundaryInputs(boundary) {
     const type = document.getElementById(`${boundary}BoundaryType`).value;
     document.getElementById(`${boundary}Constant`).classList.toggle('hidden', type === 'linear');
     document.getElementById(`${boundary}Linear`).classList.toggle('hidden', type === 'constant');
 }
 
-// Initialize boundary input visibility on load
+// Inicializar la visibilidad de las entradas de frontera al cargar
 document.addEventListener('DOMContentLoaded', () => {
     toggleBoundaryInputs('top');
     toggleBoundaryInputs('bottom');
     toggleBoundaryInputs('left');
     toggleBoundaryInputs('right');
-    // Run initial calculation with default values
+    // Ejecutar cálculo inicial con valores por defecto
     calculateLaplace();
 });
-
 
 // Core Laplace Solver
 function calculateLaplace() {
@@ -49,11 +48,11 @@ function calculateLaplace() {
     statusMessage.style.backgroundColor = '#e7f3ff';
     statusMessage.style.color = '#0056b3';
 
-    const N = parseInt(gridSizeInput.value); // Grid size (N x N)
+    const N = parseInt(gridSizeInput.value); // Tamaño de la malla (N x N)
     const maxIterations = parseInt(maxIterationsInput.value);
     const tolerance = parseFloat(toleranceInput.value);
 
-    // Validate inputs
+    // Validar entradas
     if (isNaN(N) || N < 5 || N > 100) {
         statusMessage.textContent = "Error: El tamaño de la malla debe ser entre 5 y 100.";
         statusMessage.style.backgroundColor = '#ffe7e7';
@@ -73,18 +72,18 @@ function calculateLaplace() {
         return;
     }
 
-    // Initialize potential grid
+    // Inicializar la cuadrícula de potencial
     let V = Array(N).fill(0).map(() => Array(N).fill(0));
-    let V_new = Array(N).fill(0).map(() => Array(N).fill(0)); // Used for swapping
+    let V_new = Array(N).fill(0).map(() => Array(N).fill(0)); // Usado para el intercambio
 
-    // Function to apply boundary conditions
+    // Función para aplicar condiciones de frontera
     function applyBoundaryConditions(grid) {
-        // Top Boundary (V(x,b))
+        // Borde Superior (V(x,b))
         const topType = topBoundaryType.value;
         if (topType === 'constant') {
             const val = parseFloat(document.getElementById('topV').value);
             for (let j = 0; j < N; j++) grid[0][j] = val;
-        } else { // Linear
+        } else { // Lineal
             const start = parseFloat(document.getElementById('topVStart').value);
             const end = parseFloat(document.getElementById('topVEnd').value);
             for (let j = 0; j < N; j++) {
@@ -92,12 +91,12 @@ function calculateLaplace() {
             }
         }
 
-        // Bottom Boundary (V(x,0))
+        // Borde Inferior (V(x,0))
         const bottomType = bottomBoundaryType.value;
         if (bottomType === 'constant') {
             const val = parseFloat(document.getElementById('bottomV').value);
             for (let j = 0; j < N; j++) grid[N - 1][j] = val;
-        } else { // Linear
+        } else { // Lineal
             const start = parseFloat(document.getElementById('bottomVStart').value);
             const end = parseFloat(document.getElementById('bottomVEnd').value);
             for (let j = 0; j < N; j++) {
@@ -105,34 +104,34 @@ function calculateLaplace() {
             }
         }
 
-        // Left Boundary (V(0,y))
+        // Borde Izquierdo (V(0,y))
         const leftType = leftBoundaryType.value;
         if (leftType === 'constant') {
             const val = parseFloat(document.getElementById('leftV').value);
-            for (let i = 1; i < N - 1; i++) grid[i][0] = val; // Exclude corners
-        } else { // Linear
+            for (let i = 1; i < N - 1; i++) grid[i][0] = val; // Excluir esquinas
+        } else { // Lineal
             const start = parseFloat(document.getElementById('leftVStart').value);
             const end = parseFloat(document.getElementById('leftVEnd').value);
-            for (let i = 1; i < N - 1; i++) { // Exclude corners
+            for (let i = 1; i < N - 1; i++) { // Excluir esquinas
                 grid[i][0] = start + (end - start) * (i / (N - 1));
             }
         }
 
-        // Right Boundary (V(a,y))
+        // Borde Derecho (V(a,y))
         const rightType = rightBoundaryType.value;
         if (rightType === 'constant') {
             const val = parseFloat(document.getElementById('rightV').value);
-            for (let i = 1; i < N - 1; i++) grid[i][N - 1] = val; // Exclude corners
-        } else { // Linear
+            for (let i = 1; i < N - 1; i++) grid[i][N - 1] = val; // Excluir esquinas
+        } else { // Lineal
             const start = parseFloat(document.getElementById('rightVStart').value);
             const end = parseFloat(document.getElementById('rightVEnd').value);
-            for (let i = 1; i < N - 1; i++) { // Exclude corners
+            for (let i = 1; i < N - 1; i++) { // Excluir esquinas
                 grid[i][N - 1] = start + (end - start) * (i / (N - 1));
             }
         }
     }
 
-    // Apply boundary conditions initially
+    // Aplicar condiciones de frontera inicialmente
     applyBoundaryConditions(V);
 
     let iteration = 0;
@@ -141,20 +140,20 @@ function calculateLaplace() {
     while (iteration < maxIterations && maxDiff > tolerance) {
         maxDiff = 0;
 
-        // Copy V to V_new, and apply boundaries to V_new to ensure they aren't overwritten by internal calculations
+        // Copiar V a V_new y aplicar límites para asegurar que no se sobrescriban
         for(let i = 0; i < N; i++) {
             for(let j = 0; j < N; j++) {
                 V_new[i][j] = V[i][j];
             }
         }
-        applyBoundaryConditions(V_new); // Re-apply to ensure boundaries are fixed.
+        applyBoundaryConditions(V_new); // Volver a aplicar para asegurar que los límites estén fijos.
 
-        // Iterate over internal points (1 to N-2 for 0-indexed array)
+        // Iterar sobre los puntos internos (1 a N-2 para arrays 0-indexed)
         for (let i = 1; i < N - 1; i++) {
             for (let j = 1; j < N - 1; j++) {
                 const newValue = 0.25 * (
-                    V[i + 1][j] + V[i - 1][j] + // Neighbors in x
-                    V[i][j + 1] + V[i][j - 1]   // Neighbors in y
+                    V[i + 1][j] + V[i - 1][j] + // Vecinos en x
+                    V[i][j + 1] + V[i][j - 1]   // Vecinos en y
                 );
                 const diff = Math.abs(newValue - V[i][j]);
                 if (diff > maxDiff) {
@@ -164,10 +163,10 @@ function calculateLaplace() {
             }
         }
 
-        // Swap grids for the next iteration
+        // Intercambiar cuadrículas para la siguiente iteración
         let temp = V;
         V = V_new;
-        V_new = temp; // V_new now holds the old V, ready to be overwritten
+        V_new = temp;
 
         iteration++;
     }
@@ -183,9 +182,11 @@ function calculateLaplace() {
     }
 
     drawEquipotentials(V, N);
+    // ¡NUEVO! Llama a la función para dibujar el gráfico 3D
+    draw3DPlot(V, N);
 }
 
-// Function to draw the equipotential lines and heatmap
+// Función para dibujar las líneas equipotenciales y el mapa de calor (2D)
 function drawEquipotentials(potentialGrid, N) {
     const canvasSize = laplaceCanvas.width; // 500px
     const cellSize = canvasSize / N;
@@ -204,13 +205,14 @@ function drawEquipotentials(potentialGrid, N) {
     minPotentialLabel.textContent = `${minV.toFixed(2)} V`;
     maxPotentialLabel.textContent = `${maxV.toFixed(2)} V`;
 
-    // Draw Heatmap
+    // Dibujar Mapa de Calor
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
             const potential = potentialGrid[i][j];
             const normalizedPotential = (potential - minV) / (maxV - minV);
 
-            // Interpolate color from a gradient (blue to red)
+            // Interpolar color de un degradado (azul a rojo)
+            // (Esta es una simplificación, Plotly usa una escala de colores más robusta)
             const r = Math.floor(255 * normalizedPotential);
             const b = Math.floor(255 * (1 - normalizedPotential));
             ctx.fillStyle = `rgb(${r}, 0, ${b})`;
@@ -218,94 +220,79 @@ function drawEquipotentials(potentialGrid, N) {
         }
     }
 
-    // Draw Equipotential Lines
-    // Determine contour levels. Let's aim for 10-15 lines.
-    const numLevels = 15;
-    const levelStep = (maxV - minV) / (numLevels + 1);
-    const contourLevels = [];
+    // Dibujar Líneas Equipotenciales
+    const numLevels = 15; // Número de líneas de contorno a dibujar
+    const levels = [];
+    const step = (maxV - minV) / (numLevels + 1);
     for (let i = 1; i <= numLevels; i++) {
-        contourLevels.push(minV + i * levelStep);
+        levels.push(minV + i * step);
     }
 
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 1.5;
-    ctx.font = `${Math.max(10, cellSize * 0.5)}px Arial`; // Dynamic font size for labels
-    ctx.fillStyle = 'white'; // Label color
+    ctx.font = `${Math.max(10, cellSize * 0.5)}px Arial`; // Tamaño de fuente dinámico para etiquetas
+    ctx.fillStyle = 'white'; // Color de etiqueta
 
-    contourLevels.forEach(level => {
-        // Simple Marching Squares-like approach to find line segments
+    levels.forEach(level => {
+        // Implementación simplificada de Marching Squares para dibujar segmentos de línea
         for (let i = 0; i < N - 1; i++) {
             for (let j = 0; j < N - 1; j++) {
-                // Get potentials at the four corners of the current cell
-                const p1 = potentialGrid[i][j];     // Top-left
-                const p2 = potentialGrid[i][j+1];   // Top-right
-                const p3 = potentialGrid[i+1][j+1]; // Bottom-right
-                const p4 = potentialGrid[i+1][j];   // Bottom-left
+                const p1 = potentialGrid[i][j];     // Superior-izquierda
+                const p2 = potentialGrid[i][j+1];   // Superior-derecha
+                const p3 = potentialGrid[i+1][j+1]; // Inferior-derecha
+                const p4 = potentialGrid[i+1][j];   // Inferior-izquierda
 
-                
                 let cellCase = 0;
-                if (p1 > level) cellCase |= 1; // 0001
-                if (p2 > level) cellCase |= 2; // 0010
-                if (p3 > level) cellCase |= 4; // 0100
-                if (p4 > level) cellCase |= 8; // 1000
+                if (p1 > level) cellCase |= 1;
+                if (p2 > level) cellCase |= 2;
+                if (p3 > level) cellCase |= 4;
+                if (p4 > level) cellCase |= 8;
 
-              
-                let crossings = [];
-
-                
                 function interpolate(val1, val2, coord1, coord2, target) {
-                    if (val1 === val2) return (coord1 + coord2) / 2; // Avoid division by zero
+                    if (val1 === val2) return (coord1 + coord2) / 2;
                     return coord1 + (coord2 - coord1) * (target - val1) / (val2 - val1);
                 }
 
-                
                 ctx.beginPath();
                 switch (cellCase) {
-                    case 1: // P1 is above, others below
-                    case 14: // P1 is below, others above
-                        ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize); // Left edge
-                        ctx.lineTo(interpolate(p1, p2, 0, cellSize, level) + j * cellSize, i * cellSize); // Top edge
+                    // Aquí se dibujan los segmentos de línea basados en el "caso" de Marching Squares
+                    // Esto es una simplificación para la visualización, no una implementación completa.
+                    case 1: case 14:
+                        ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize);
+                        ctx.lineTo(interpolate(p1, p2, 0, cellSize, level) + j * cellSize, i * cellSize);
                         break;
-                    case 2: // P2 above
-                    case 13: // P2 below
-                        ctx.moveTo(interpolate(p1, p2, 0, cellSize, level) + j * cellSize, i * cellSize); // Top edge
-                        ctx.lineTo((j + 1) * cellSize, interpolate(p2, p3, 0, cellSize, level) + i * cellSize); // Right edge
+                    case 2: case 13:
+                        ctx.moveTo(interpolate(p1, p2, 0, cellSize, level) + j * cellSize, i * cellSize);
+                        ctx.lineTo((j + 1) * cellSize, interpolate(p2, p3, 0, cellSize, level) + i * cellSize);
                         break;
-                    case 4: // P3 above
-                    case 11: // P3 below
-                        ctx.moveTo((j + 1) * cellSize, interpolate(p2, p3, 0, cellSize, level) + i * cellSize); // Right edge
-                        ctx.lineTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize); // Bottom edge
+                    case 4: case 11:
+                        ctx.moveTo((j + 1) * cellSize, interpolate(p2, p3, 0, cellSize, level) + i * cellSize);
+                        ctx.lineTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize);
                         break;
-                    case 8: // P4 above
-                    case 7: // P4 below
-                        ctx.moveTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize); // Bottom edge
-                        ctx.lineTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize); // Left edge
+                    case 8: case 7:
+                        ctx.moveTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize);
+                        ctx.lineTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize);
                         break;
-                    case 3: // P1, P2 above
-                    case 12: // P1, P2 below
-                        ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize); // Left
-                        ctx.lineTo((j + 1) * cellSize, interpolate(p2, p3, 0, cellSize, level) + i * cellSize); // Right
+                    case 3: case 12: // P1, P2 arriba (o abajo)
+                        ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize);
+                        ctx.lineTo((j + 1) * cellSize, interpolate(p2, p3, 0, cellSize, level) + i * cellSize);
                         break;
-                    case 5: // P1, P3 above
-                    case 10: // P1, P3 below
-                        ctx.moveTo(interpolate(p1, p2, 0, cellSize, level) + j * cellSize, i * cellSize); // Top
-                        ctx.lineTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize); // Bottom
+                    case 5: case 10: // P1, P3 arriba (o abajo)
+                        ctx.moveTo(interpolate(p1, p2, 0, cellSize, level) + j * cellSize, i * cellSize);
+                        ctx.lineTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize);
                         break;
-                    case 6: // P2, P3 above
-                    case 9: // P2, P3 below
-                        ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize); // Left
-                        ctx.lineTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize); // Bottom
+                    case 6: case 9: // P2, P3 arriba (o abajo)
+                        ctx.moveTo(j * cellSize, interpolate(p1, p4, 0, cellSize, level) + i * cellSize);
+                        ctx.lineTo(interpolate(p4, p3, 0, cellSize, level) + j * cellSize, (i + 1) * cellSize);
                         break;
                 }
                 ctx.stroke();
-
-               
             }
         }
     });
 
-   
-    ctx.strokeStyle = '#95a5a6'; // Light gray
+    // Dibujar líneas de la cuadrícula en la parte superior (opcional)
+    ctx.strokeStyle = '#95a5a6'; // Gris claro
     ctx.lineWidth = 0.5;
     for (let i = 0; i <= N; i++) {
         ctx.beginPath();
@@ -320,10 +307,83 @@ function drawEquipotentials(potentialGrid, N) {
 }
 
 
+// ¡NUEVO! Función para dibujar el gráfico 3D usando Plotly.js
+function draw3DPlot(potentialGrid, N) {
+    // Los datos Z son directamente tu potentialGrid
+    const zData = potentialGrid;
 
+    // Crea arrays para las coordenadas X e Y
+    // Plotly esperará que X e Y sean arrays 1D que definan las coordenadas
+    // para las columnas y filas de tu matriz Z, respectivamente.
+    const xCoords = Array.from({ length: N }, (_, i) => i); // Del 0 a N-1
+    const yCoords = Array.from({ length: N }, (_, i) => (N - 1) - i); // Del N-1 a 0 (para que el origen (0,0) esté en la parte inferior izquierda en el gráfico)
+
+
+    const data = [{
+        z: zData,
+        x: xCoords,
+        y: yCoords,
+        type: 'surface',
+        colorbar: {
+            title: 'Potencial (V)',
+            titleside: 'right',
+            titlefont: { size: 14, color: '#333' },
+            tickfont: { size: 10, color: '#333' }
+        },
+        // Puedes cambiar la escala de colores: 'Viridis', 'Jet', 'Portland', 'Greys', 'Electric'
+        colorscale: 'Viridis'
+    }];
+
+    const layout = {
+        title: {
+            text: 'Distribución de Potencial (3D)',
+            font: { size: 18, color: '#2980b9' }
+        },
+        scene: {
+            xaxis: {
+                title: 'Posición X',
+                autorange: true,
+                showgrid: true,
+                zeroline: true,
+                gridcolor: '#e0e0e0',
+                titlefont: { size: 12, color: '#555' }
+            },
+            yaxis: {
+                title: 'Posición Y',
+                autorange: true,
+                showgrid: true,
+                zeroline: true,
+                gridcolor: '#e0e0e0',
+                titlefont: { size: 12, color: '#555' }
+            },
+            zaxis: {
+                title: 'Potencial (V)',
+                autorange: true,
+                showgrid: true,
+                zeroline: true,
+                gridcolor: '#e0e0e0',
+                titlefont: { size: 12, color: '#555' }
+            },
+            // Configura la cámara para una vista inicial si lo deseas
+            // camera: {
+            //     eye: { x: 1.25, y: 1.25, z: 1.25 }
+            // }
+        },
+        margin: {
+            l: 0, r: 0, b: 0, t: 30 // Reduce márgenes para aprovechar espacio
+        },
+        hovermode: 'closest' // Mejor experiencia al pasar el mouse
+    };
+
+    // Renderiza el gráfico en el div con id 'laplace3DPlot'
+    Plotly.newPlot('laplace3DPlot', data, layout, { responsive: true, displayModeBar: true });
+}
+
+
+// Event listener para el botón de calcular
 calculateButton.addEventListener('click', calculateLaplace);
 
-
+// Event listeners para los cambios en el tipo de frontera
 topBoundaryType.addEventListener('change', () => toggleBoundaryInputs('top'));
 bottomBoundaryType.addEventListener('change', () => toggleBoundaryInputs('bottom'));
 leftBoundaryType.addEventListener('change', () => toggleBoundaryInputs('left'));

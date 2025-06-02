@@ -1,4 +1,4 @@
-# simulador-ecuacion-laplace
+#1 simulador-ecuacion-laplace
 Simulador interactivo de la Ecuación de Laplace usando el método de Diferencias Finitas.
 **Explicación del Código**
 **La Función calculateLaplace()**
@@ -6,7 +6,7 @@ La función calculateLaplace() es el cerebro central de este simulador. Es la en
 
 Este núcleo del simulador implementa el Método de Diferencias Finitas mediante un proceso iterativo de "relajación".
 
-**1. Preparación y Validación de Parámetros**
+#2**1. Preparación y Validación de Parámetros**
 Al inicio, la función se encarga de configurar el entorno y asegurar que los datos de entrada sean válidos:
 
 *Mensaje de Estado Inicial:*
@@ -32,7 +32,7 @@ if (isNaN(maxIterations) || maxIterations < 100) { /* ... error ... */ return; }
 if (isNaN(tolerance) || tolerance <= 0) { /* ... error ... */ return; }
 ```
 
-**2. Inicialización de la Cuadrícula (Malla)**
+#2**2. Inicialización de la Cuadrícula (Malla)**
 Creación de Matrices de Potencial:
 Se inicializan dos matrices 2D, V y V_new, ambas de tamaño N×N. Estas matrices representarán la cuadrícula de puntos en la que se calculará el potencial:
 
@@ -44,7 +44,7 @@ V_new: Se utiliza para almacenar los valores de potencial calculados para la sig
 let V_new = Array(N).fill(0).map(() => Array(N).fill(0));
 ```
 
-3. Aplicación de las Condiciones de Frontera (applyBoundaryConditions)
+#2**3. Aplicación de las Condiciones de Frontera (applyBoundaryConditions)**
 Esta función auxiliar es vital para definir el problema. La Ecuación de Laplace requiere que el potencial sea conocido en los límites de la región.
 
 Funcionalidad:
@@ -58,7 +58,7 @@ Uso en el Proceso:
 
 Se llama a applyBoundaryConditions(V); al inicio para establecer la configuración inicial del campo de potencial.
 Se llama a applyBoundaryConditions(V_new); dentro de cada iteración del bucle principal para asegurar que los valores de potencial en los bordes permanezcan fijos y no se vean afectados por el proceso de relajación que actualiza los puntos internos.
-4. El Proceso Iterativo de Relajación (El Núcleo del Solucionador)
+#2**4. El Proceso Iterativo de Relajación (El Núcleo del Solucionador)**
 Este es el corazón del algoritmo numérico. La Ecuación de Laplace implica que, en un estado de equilibrio, el potencial en cualquier punto es el promedio de sus vecinos. El proceso de relajación busca alcanzar este equilibrio de forma iterativa.
 
 Bucle Principal (while):
@@ -117,7 +117,7 @@ Al finalizar cada iteración, las matrices V y V_new se intercambian. Esto signi
 V = V_new;
 V_new = temp;
 ```
-5. Resultados y Visualización
+#2**5. Resultados y Visualización**
 Una vez que el bucle de iteración termina (ya sea por convergencia o por alcanzar el máximo de iteraciones), la función informa al usuario el resultado del cálculo y procede a la visualización:
 
 Mensaje de Estado Final:

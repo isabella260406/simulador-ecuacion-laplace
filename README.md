@@ -7,7 +7,7 @@ La función calculateLaplace() es el cerebro central de este simulador. Es la en
 
 Este núcleo del simulador implementa el Método de Diferencias Finitas mediante un proceso iterativo de "relajación".
 
-#**1. Preparación y Validación de Parámetros**
+# **1. Preparación y Validación de Parámetros**
 Al inicio, la función se encarga de configurar el entorno y asegurar que los datos de entrada sean válidos:
 
 **Mensaje de Estado Inicial:**
@@ -33,7 +33,7 @@ if (isNaN(maxIterations) || maxIterations < 100) { /* ... error ... */ return; }
 if (isNaN(tolerance) || tolerance <= 0) { /* ... error ... */ return; }
 ```
 
-#**2. Inicialización de la Cuadrícula (Malla)**
+# **2. Inicialización de la Cuadrícula (Malla)**
 **Creación de Matrices de Potencial:**
 Se inicializan dos matrices 2D, V y V_new, ambas de tamaño N×N. Estas matrices representarán la cuadrícula de puntos en la que se calculará el potencial:
 

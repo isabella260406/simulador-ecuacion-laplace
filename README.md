@@ -12,9 +12,13 @@ Al inicio, la función se encarga de configurar el entorno y asegurar que los da
 
 **Mensaje de Estado Inicial:**
 Se actualiza el mensaje de estado en la interfaz para indicar que el cálculo está en progreso.
-```statusMessage.textContent = "Calculando...";
-statusMessage.style.backgroundColor = '#e7f3ff';
-statusMessage.style.color = '#0056b3';
+```
+    if (isNaN(N) || N < 5 || N > 100) {
+        statusMessage.textContent = "Error: El tamaño de la malla debe ser entre 5 y 100.";
+        statusMessage.style.backgroundColor = '#ffe7e7';
+        statusMessage.style.color = '#cc0000';
+        return;
+    }
 ```
 **Obtención de Parámetros:**
 Se recuperan los valores definidos por el usuario para el tamaño de la malla (N), el número máximo de iteraciones (maxIterations) y la tolerancia de convergencia (tolerance) desde los elementos HTML.

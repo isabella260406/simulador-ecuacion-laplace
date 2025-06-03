@@ -54,7 +54,7 @@ La función applyBoundaryConditions(grid) lee las configuraciones de los cuatro 
 Para cada borde (Superior, Inferior, Izquierdo, Derecho), aplica el potencial según el tipo seleccionado:
 *Constante:* Asigna un valor fijo a todos los puntos de ese borde.
 
-*Lineal:*Calcula un potencial que varía gradualmente entre un valor de inicio y un valor final a lo largo del borde, utilizando interpolación lineal.
+*Lineal:* Calcula un potencial que varía gradualmente entre un valor de inicio y un valor final a lo largo del borde, utilizando interpolación lineal.
 
 *Manejo de Esquinas:* Es importante destacar que los puntos de las esquinas se definen por los bordes superior e inferior primero, y luego los bordes izquierdo y derecho se aplican solo a los puntos intermedios para evitar sobrescribir las esquinas ya establecidas.
 *Uso en el Proceso:*

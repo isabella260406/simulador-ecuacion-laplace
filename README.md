@@ -46,7 +46,7 @@ let V_new = Array(N).fill(0).map(() => Array(N).fill(0));
 ```
 
 # **3. Aplicación de las Condiciones de Frontera (applyBoundaryConditions)**
-Esta función auxiliar es vital para definir el problema. La Ecuación de Laplace requiere que el potencial sea conocido en los límites de la región.
+La Ecuación de Laplace requiere que el potencial sea conocido en los límites de la región.
 
 **Funcionalidad:**
 
